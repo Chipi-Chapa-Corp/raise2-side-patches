@@ -1,0 +1,36 @@
+{
+  "format_version": 1,
+  "experimental": true,
+  "physical_red_tail_fix_confirmed": false,
+  "target": "Raise 2 1.5.0 side LED-driver CS deghost setting",
+  "input_sha256": "d01083b72600f77226f815fcc0828dcc08fb215dd2a6fa12a5fb88890a940186",
+  "ordinary_map_patch_sha256": "1bf7b886df75ef50ff0a0f5a410a3d53ae0c40bfa96aedd2e3e607da2ad0ebc7",
+  "output_sha256": "f06a49cbb88f257665de466b7bd53bb86b98df0264955c8e0d9c159fa192562b",
+  "size_bytes": 216832,
+  "additional_instruction_patch": {
+    "address": "0x1000a272",
+    "file_offset": "0x5272",
+    "before": "a03b",
+    "after": "a23b",
+    "meaning": "SUBS r3,#0xA0 -> SUBS r3,#0xA2; resulting PG2/02 write B3 -> B1"
+  },
+  "register": {
+    "chip": "IS31FL3743B",
+    "page": 2,
+    "address": "0x02",
+    "before": "0xb3",
+    "after": "0xb1",
+    "changed_bits": "CSPUR 011 -> 001",
+    "before_cs_pullup": "2.0 kohm during CS off time",
+    "after_cs_pullup": "0.5 kohm during CS off time",
+    "sw_pulldown_and_phase_unchanged": true,
+    "global_current_and_pwm_unchanged": true
+  },
+  "datasheet": "https://www.lumissil.com/assets/pdf/core/IS31FL3743B_DS.pdf",
+  "checksum_fields": {
+    "seal_crc_offset": 8,
+    "program_crc_offset": 20,
+    "algorithm": "CRC32/zlib"
+  },
+  "rollback": "Use ordinary map-patched keyscanner.bin from r12 or official stock 1.5.0. Physical rollback has not been tested."
+}

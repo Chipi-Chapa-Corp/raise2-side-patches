@@ -52,3 +52,33 @@ untested. Keep an official rollback package before installing custom firmware.
 
 The MIT license applies to the patching tools and metadata in this repository;
 it does not relicense Dygma firmware downloaded separately.
+
+## Optional CS anti-ghost experiment
+
+`tools/patch-side-deghost.py` is a separate experimental variant. The ordinary
+map patcher and its output remain unchanged. The experiment adds one changed
+instruction byte at execution address `0x1000a272` (two-byte instruction window):
+`SUBS r3,#0xA0` becomes `SUBS r3,#0xA2`. The released initializer then writes
+IS31FL3743B function-page register 02h as B1 instead of B3. This changes only the
+CS pull-up selection from 2kΩ to 0.5kΩ during off time. SW pull-down, phase,
+global LED current, PWM values and the two allocation fixes remain unchanged.
+
+The [manufacturer datasheet](https://www.lumissil.com/assets/pdf/core/IS31FL3743B_DS.pdf)
+describes this as an available de-ghost setting (Table 8 and the de-ghost section).
+The stronger setting is a candidate for testing a subtle red phase reported on
+all fading keys; it is not an established physical fix. It does not add PWM
+resolution or fix the unavoidable lowest PWM 1→0 transition. No hardware safety,
+power-consumption or physical rollback test is claimed. Metadata records the
+exact input/output hashes, extra instruction bytes and CRC handling in
+`patches/raise2-v1.5.0-deghost-experiment.json`.
+
+Run it only as an explicitly selected experiment:
+
+```bash
+python tools/patch-side-deghost.py /path/to/official-1.5.0/keyscanner.bin /path/to/new-keyscanner.bin
+```
+
+Both patchers require the original official image and refuse unexpected inputs
+or overwriting the input/output file. This tool never opens a keyboard or flashes
+firmware. The main firmware checkout supplies emulation tests for the emitted
+register bytes and a separately named test package, keeping ordinary r12 intact.
