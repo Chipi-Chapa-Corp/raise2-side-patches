@@ -1,0 +1,39 @@
+{
+  "format_version": 1,
+  "target": "Dygma Raise 2 side application",
+  "base_release": "Raise2_v1.5.0",
+  "input": {
+    "url": "https://github.com/Dygmalab/Firmware-release/releases/download/Raise2_v1.5.0/keyscanner.bin",
+    "size_bytes": 216832,
+    "sha256": "d01083b72600f77226f815fcc0828dcc08fb215dd2a6fa12a5fb88890a940186"
+  },
+  "output": {
+    "size_bytes": 216832,
+    "sha256": "1bf7b886df75ef50ff0a0f5a410a3d53ae0c40bfa96aedd2e3e607da2ad0ebc7"
+  },
+  "image_address_bias": "0x10005000",
+  "instruction_patches": [
+    {
+      "address": "0x10015cea",
+      "file_offset": "0x10cea",
+      "before": "a3689842",
+      "after": "020006e0",
+      "handler": "LAYER_UNDERGLOW_COLORS"
+    },
+    {
+      "address": "0x10015de2",
+      "file_offset": "0x10de2",
+      "before": "a3689842",
+      "after": "020007e0",
+      "handler": "LAYER_KEYMAP_COLORS"
+    }
+  ],
+  "reason": "Update an existing layer map without appending another Layer allocation on every packet; retain range checks and configuration flags.",
+  "checksum_fields": {
+    "seal_crc_offset": 8,
+    "program_crc_offset": 20,
+    "algorithm": "CRC32/zlib"
+  },
+  "side_built_from_source": false,
+  "physical_freeze_root_cause_confirmed": false
+}
